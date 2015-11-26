@@ -12,19 +12,8 @@ class Foo
 }
 ```
 
-Get and set `bar` using _reflection_ or _refraction_:
-<table>
-<tr>
-<th>
-Using reflection
-</th>
-<th>
-Using refraction
-</th>
-</tr>
-<tr>
-<td>
-<pre lang="php">
+Get and set `bar` using PHP's native _reflection_:
+```php
 // instantiate a new foo
 $foo = new Foo();
 
@@ -34,13 +23,13 @@ $class = new ReflectionClass($foo);
 // get Foo's property
 $property = $class->getProperty('bar');
 
-// get and set the property's value 
+// get and set the property's value
 $property->getValue($foo);
 $property->setValue($foo, 'baz');
-</pre>
-</td>
-<td>
-<pre lang="php">
+```
+
+Get and set `bar` using _refraction_:
+```php
 // instantiate a new foo
 $foo = new Foo();
 
@@ -53,10 +42,7 @@ $property = $class->getProperty('bar');
 // get and set the property's value
 $property->get(); 
 $property->set('baz');
-</pre>
-</td
-</tr>
-</table>
+```
 
 There is a small but important difference between _reflection_ and _refraction_ in the last two lines. 
 
@@ -64,7 +50,7 @@ With PHP's native reflection methods, the _reflected_ property is unaware of whe
 
 ## Reflection
 
-PHP's native [Reflection](http://php.net/manual/en/book.reflection.php) library seems to be considered voodoo by many PHP developers. It's rarely used and poorly understood. Frankly, it was a mystery to me until I started experimenting with it.
+PHP's native [Reflection](http://php.net/manual/en/book.reflection.php) library is considered voodoo by many PHP developers. It's rarely used and poorly understood. Frankly, it was a mystery to me until I started experimenting with it.
 
 I quickly learned reflection is a powerful tool. Reflection allows you to inspect classes, methods, and properties programmatically. At runtime, you can check if a class has a method; you can read a method's DocBlock; you can check a property's visiblity; and, much more. You can do some pretty amazing things with reflection.
 
@@ -85,7 +71,7 @@ class Foo
     public $foo;
 }
 
-// instantiate a new object
+// instantiate a new Foo
 $foo = new Foo();
 
 // get the object's *reflection*
@@ -95,13 +81,13 @@ $class = new ReflectionClass($foo);
 $property = $class->getProperty('foo');
 
 // get the property's value
-$value = $property->getValue($foo);   // we have to pass an instance again!
+$value = $property->getValue($foo);   // we have to pass an instance again?!
 
 // set the property's value
-$value = $property->setValue($foo, 'bars');  // we have to pass an instance again!
+$value = $property->setValue($foo, 'bars');  // we have to pass an instance again?!
 ``` 
 
-In my mind, I wanted my reflections to remember where they came from. So, I created the *refraction* library.
+In my mind, reflections should remember where they came from. So, I created the *refraction* library.
 
 ## Naming convention
 
@@ -138,7 +124,7 @@ class Child extends Base
     }
 }
 
-// instantiate an object
+// instantiate a Child object
 $child = new Child();
 
 // instantiate a *reflection*
