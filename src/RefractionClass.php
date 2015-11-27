@@ -221,9 +221,12 @@ class RefractionClass extends \ReflectionClass
         // get the current object
         $object = $this;
         
-        // while the current object has a parent class
-        // keep in mind, getParentClass() will return a ReflectionClass instance, not
-        //     a RefractionClass(); thus, the getMethods() method is not recursive
+        // while the current object has a parent class...
+        // keep in mind, the getParentClass() will return a *reflection* class
+        //     instance, not a *refraction* class instance; thus, the call to the 
+        //     getMethods() method is not recursive
+        // also, keep in mind, PHP's array_diff() function uses strict comparison, 
+        //     but its in_array() function uses loose comparison
         //
         while (false !== ($parent = $object->getParentClass())) {
             // set the "old" and "new" methods
@@ -233,16 +236,10 @@ class RefractionClass extends \ReflectionClass
             $privates = $parent->getMethods(\ReflectionMethod::IS_PRIVATE);
             // loop through the "old" methods
             foreach ($oldMethods as $oldMethod) {
-                // loop through the parent's private methods
-                foreach ($privates as $private) {
-                    // if the "old" method is not a parent's private method
-                    if (
-                        $oldMethod->name !== $private->name
-                        || $oldMethod->class !== $private->class
-                    ) {
-                        // append it as a "new" method
-                        $newMethods[] = $oldMethod;
-                    }
+                // if the "old" method is not a private method of the parent
+                if ( ! in_array($oldMethod, $privates)) {
+                    // append it to the "new" methods
+                    $newMethods[] = $oldMethod;
                 }
             }
             // save the "new" methods
@@ -275,9 +272,12 @@ class RefractionClass extends \ReflectionClass
         // get the current object
         $object = $this;
         
-        // while the current object has a parent object
-        // keep in mind, getParentClass() will return a ReflectionClass instance, not
-        //     a RefractionClass(); thus, the getMethods() method is not recursive
+        // while the current object has a parent object...
+        // keep in mind, the getParentClass() method will return a *reflection* class
+        //     instance, not a *refraction* class instance; thus, the getMethods()
+        //     method is not recursive
+        // also, keep in mind, PHP's array_diff() function uses strict comparison, 
+        //     but its in_array() function uses loose comparison
         //
         while (false !== ($parent = $object->getParentClass())) {
             // set the "old" and "new" properties
@@ -287,22 +287,16 @@ class RefractionClass extends \ReflectionClass
             $privates = $parent->getProperties(\ReflectionProperty::IS_PRIVATE);
             // loop through the "old" properties
             foreach ($oldProperties as $oldProperty) {
-                // loop through the parent's private properties
-                foreach ($privates as $private) {
-                    // if the property is not a private parent property
-                    if (
-                        $oldProperty->name !== $private->name
-                        || $oldProperty->class !== $private->class
-                    ) {
-                        // append the "old" property
-                        $newProperties[] = $oldProperty;
-                    }
+                // if the "old" property is not a private property of the parent
+                if ( ! in_array($oldProperty, $privates)) {
+                    // append it to the "new" properties
+                    $newProperties[] = $oldProperty;
                 }
             }
             // save the "new" properties
             $properties = $newProperties;
             // advance to the next parent
-            $object = $parent;  
+            $object = $parent; 
         }
         
         return $properties;
