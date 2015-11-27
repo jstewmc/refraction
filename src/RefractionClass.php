@@ -222,6 +222,9 @@ class RefractionClass extends \ReflectionClass
         $object = $this;
         
         // while the current object has a parent class
+        // keep in mind, getParentClass() will return a ReflectionClass instance, not
+        //     a RefractionClass(); thus, the getMethods() method is not recursive
+        //
         while (false !== ($parent = $object->getParentClass())) {
             // set the "old" and "new" methods
             $oldMethods = $methods;
@@ -273,6 +276,9 @@ class RefractionClass extends \ReflectionClass
         $object = $this;
         
         // while the current object has a parent object
+        // keep in mind, getParentClass() will return a ReflectionClass instance, not
+        //     a RefractionClass(); thus, the getMethods() method is not recursive
+        //
         while (false !== ($parent = $object->getParentClass())) {
             // set the "old" and "new" properties
             $oldProperties = $properties;
