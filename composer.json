@@ -1,6 +1,6 @@
 {
 	"name": "jstewmc/refraction",
-	"description": "Like reflection but with instances, not definitions",
+	"description": "Like PHP reflection but with instances, not definitions",
 	"license": "MIT",
 	"keywords": ["PHP", "reflection", "refraction", "class", "method", "property"],
 	"authors": [
